@@ -22,8 +22,8 @@
         #map-frame {
             position: relative;
             width: 100%;
-            /* Ditingkatkan dari 75% (4:3) menjadi 85% untuk menambah tinggi peta */
-            padding-bottom: 85%; 
+            /* TINGGI DIKURANGI 10% DARI 85% MENJADI 75% */
+            padding-bottom: 75%; 
             overflow: hidden; 
             /* Sudut bawah dibiarkan lurus agar menempel sempurna pada blok detail */
             border-bottom-left-radius: 0; 
@@ -41,16 +41,16 @@
             background-color: rgba(255, 255, 255, 0.85);
             padding: 0.5rem 0.75rem;
             border-radius: 0.375rem;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); /* Added stronger shadow for aesthetic */
             font-size: 0.75rem;
             font-weight: 600;
         }
 
         /* Styling for the main detail grid based on the provided image */
         #detail-grid {
-            /* RASIO BARU: 1fr untuk Magnitudo, 2fr untuk Status/Dampak (mengekspansi blok kanan) */
+            /* RASIO BARU DARI 1fr 2fr MENJADI 1fr 2.5fr */
             display: grid;
-            grid-template-columns: 1fr 2fr; 
+            grid-template-columns: 1fr 2.5fr; 
             min-height: 200px;
             /* Pastikan menempel pada peta */
             margin-top: -5px; 
@@ -71,7 +71,7 @@
             border-top-right-radius: 0; 
         }
         
-        /* UKURAN FONT MAGNITUDO RESPONSIVE (DIKECILKAN DARI 8VW KE 6VW) */
+        /* UKURAN FONT MAGNITUDO RESPONSIVE (6VW) */
         #display-magnitude {
             /* Font size akan dihitung berdasarkan 6% dari lebar viewport (vw) */
             font-size: 6vw; 
@@ -80,6 +80,16 @@
             font-weight: 900;
             line-height: 1;
         }
+        
+        /* FONT SIZE UNTUK WAKTU DIKECILKAN */
+        .time-container {
+            font-size: 0.8rem; /* Ukuran font lebih kecil untuk tanggal/waktu */
+        }
+        .time-container svg {
+             width: 1rem; /* Ikon juga sedikit dikecilkan */
+             height: 1rem;
+        }
+
 
         /* Specific styling for the right (white) block - LOKASI/GUNCANGAN/AREA */
         .status-area-block {
@@ -93,14 +103,19 @@
         /* Status Banner menempel di bagian atas blok kanan */
         #display-tsunami {
             width: 100%;
-            padding: 1.5rem 1.5rem 1rem 1.5rem; /* Padding lebih besar untuk area status */
+            /* PADDING DIHILANGKAN DARI STYLE INLINE DAN DIGANTI TAILWIND UTILITY DI BAWAH */
             box-sizing: border-box;
             border-top-left-radius: 0;
+            line-height: 1.2; 
         }
 
         /* Konten detail di bawah status banner */
         #detail-content-wrapper {
             padding: 1.5rem;
+            /* Padding atas dihilangkan untuk menempelkan judul ke status banner */
+            padding-top: 0; 
+            /* HAPUS PADDING BAWAH PADA DETAIL WRAPPER AGAR MELEKAT */
+            padding-bottom: 0; 
         }
         
         /* Custom Seismic Icon Styling (HAPUS ANIMASI PULSE) */
@@ -108,11 +123,116 @@
             /* Pastikan tidak ada animasi */
         }
         
-        /* Custom Warning Icon for Affected Areas */
-        .warning-icon {
-            background-color: transparent;
+        /* Styling untuk Tabel BMKG dan Recorded (dioptimalkan agar ringkas) */
+        .compact-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.7rem; 
+            margin-top: 0; /* Hapus margin top */
+        }
+        /* Optimasi spasi judul tabel */
+        .list-header {
+            /* MENGOPTIMALKAN SPASI ATAS BAWAH JUDUL TABEL */
+            margin-top: 0;
+            margin-bottom: 0.1rem; 
+        }
+        .compact-table th, .compact-table td {
+            /* PADDING VERTIKAL DIKURANGI EKSTREM */
+            padding-left: 0.15rem;
+            padding-right: 0.15rem;
+            /* PADDING VERTICAL SUPER-COMPACT */
+            padding-top: 0.02rem; 
+            padding-bottom: 0.02rem;
+            text-align: left;
+            /* HAPUS GARIS HORIZONTAL DAN VERTIKAL */
+            border-bottom: none; 
+        }
+        .compact-table th {
+            font-weight: 600;
+            background-color: #f3f4f6;
+            font-size: 0.7rem; 
+            /* HAPUS GARIS BAWAH HEADERS */
+            border-bottom: none; 
+        }
+        .compact-table td {
+            /* HAPUS GARIS BAWAH KONTEN */
+            border-bottom: none; 
+            /* LINE HEIGHT DIKURANGI */
+            line-height: 1.1; 
+        }
+        /* Optimasi spasi caption total wilayah */
+        #total-bmkg-caption, #total-recorded-caption {
+            /* HAPUS MARGIN ATAS DAN BAWAH */
+            margin-top: 0.1rem; 
+            margin-bottom: 0;
+            font-size: 0.7rem; /* Kecilkan font caption total */
+        }
+        
+        /* === BMKG STATUS BADGES === */
+        .bmkg-status-cell {
+            font-weight: 600; 
+            text-align: center; 
+            border-radius: 0.25rem;
+            padding: 0.1rem 0.4rem; 
+            min-width: 80px; /* Lebar seragam */
+            display: inline-block; 
+        }
+        .status-awas { background-color: #DC2626; color: #ffffff; }
+        .status-siaga { background-color: #f59e0b; color: #ffffff; }
+        .status-waspada { background-color: #fde047; color: #1f2937; }
+        .bmkg-center-content { text-align: center; }
+
+        /* === RECORDED HEIGHT BADGES (NEW) === */
+        .recorded-height-cell {
+            font-weight: 700;
+            text-align: center;
+            border-radius: 0.25rem;
+            padding: 0.1rem 0.4rem; 
+            min-width: 65px; 
+            display: inline-block;
+            color: #1f2937;
+        }
+        /* MAPPING WARNA KETINGGIAN */
+        .h-005-03 { background-color: #00BFFF; color: #fff; } /* Biru Muda */
+        .h-03-1 { background-color: #FFFF00; color: #1f2937; } /* Kuning (Text Hitam) */
+        .h-1-3 { background-color: #FFA500; color: #fff; } /* Orange */
+        .h-3-10 { background-color: #FF0000; color: #fff; } /* Merah */
+        .h-10-plus { background-color: #800080; color: #fff; } /* Ungu */
+        
+        /* LEGEND STYLING */
+        .info-legend {
+            background: white;
+            padding: 6px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            border-radius: 5px;
+            font-size: 0.7rem;
+            color: #333;
+            max-width: 150px;
+        }
+        /* Style baru untuk kotak berwarna di legenda */
+        .legend-square { 
+            width: 12px; /* Lebar kotak */
+            height: 12px; /* Tinggi kotak */
+            float: left;
+            margin-right: 5px;
+            /* Menghilangkan radius 50% untuk membuat kotak */
+            border-radius: 3px; 
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+        .info-legend span {
+            display: block;
+            margin-bottom: 2px;
         }
 
+        /* Marker Peringatan Global yang diperbaiki */
+        .global-warning-marker {
+            /* Menghapus background-color Leaflet yang mengganggu */
+            background: none !important; 
+            border: none !important;
+            box-shadow: none !important;
+            /* Menghilangkan elemen visual Leaflet yang mengganggu rendering SVG */
+            line-height: 0;
+        }
     </style>
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
@@ -120,7 +240,7 @@
 <body class="p-4 sm:p-8">
 
     <div id="app" class="max-w-4xl mx-auto">
-        <h1 class="text-4xl font-extrabold text-gray-900 mb-6 text-center">Tsunami Data Visualizer</h1>
+        <h1 class="text-4xl font-extrabold text-gray-900 mb-6 font-semibold text-center">Tsunami Data Visualizer</h1>
         <p class="lg:text-gray-600 mb-8 text-center">Masukkan data gempa sumber dan wilayah yang berpotensi terdampak untuk visualisasi peta.</p>
 
         <!-- Page 1: Input Form -->
@@ -133,40 +253,100 @@
                     <p class="text-sm leading-6 text-gray-600">Gunakan format CSV: **mag,kedalaman,waktu,lat,long,lokasi**. Hanya satu baris data.</p>
                     <div class="mt-4">
                         <textarea id="csv1-input" name="csv1_input" rows="3" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3 text-sm" placeholder="mag,kedalaman,waktu,lat,long,lokasi
-"></textarea>
+7.1,10.0,2025-09-25T16:44:55Z,45.21,148.55,&quot;Kepulauan Kuril Selatan&quot;"></textarea>
                     </div>
                 </div>
 
-                <!-- Section 2: Status Tsunami -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 border-b border-gray-200 pb-8">
-                    <div class="md:col-span-3">
+                <!-- Section 2: Status Peringatan Tsunami (Global) -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 border-b border-gray-200 pb-8">
+                    <div class="md:col-span-4">
                         <h2 class="text-2xl font-semibold leading-7 text-gray-900 mb-4">2. Status Peringatan Tsunami</h2>
                     </div>
                     <!-- Status Tsunami Options (Full Width) -->
-                    <div id="status-options" class="col-span-3 grid grid-cols-1 sm:grid-cols-3 gap-3">
-                        <label class="flex items-center p-3 border border-red-300 rounded-lg cursor-pointer hover:bg-red-50 transition-colors bg-red-100/50">
+                    <div id="status-options" class="col-span-4 grid grid-cols-1 sm:grid-cols-4 gap-3">
+                        <label class="p-3 border border-red-300 rounded-lg cursor-pointer hover:bg-red-50 transition-colors bg-red-100/50">
                             <input type="radio" name="tsunami_status" value="Berpotensi Tsunami" required class="form-radio h-4 w-4 text-red-600">
-                            <span class="ml-3 text-sm font-medium text-red-700">Berpotensi Tsunami</span>
+                            <span class="ml-3 text-base font-medium text-red-700">Berpotensi Tsunami</span>
+                            <!-- KETERANGAN BARU -->
+                            <p class="text-xs text-red-500 mt-1 pl-6">Memerlukan Data Gempa (1) & Wilayah Potensi Global (3) / BMKG (4).</p>
+                            <!-- END KETERANGAN -->
                         </label>
-                        <label class="flex items-center p-3 border border-yellow-300 rounded-lg cursor-pointer hover:bg-yellow-50 transition-colors bg-yellow-100/50">
+                         <!-- OPSI BARU -->
+                        <label class="p-3 border border-red-500 rounded-lg cursor-pointer hover:bg-red-50 transition-colors bg-red-100/50">
+                            <input type="radio" name="tsunami_status" value="TSUNAMI MASIH BERLANGSUNG" class="form-radio h-4 w-4 text-red-700">
+                            <span class="ml-3 text-base font-medium text-red-800">TSUNAMI MASIH BERLANGSUNG</span>
+                            <!-- KETERANGAN BARU -->
+                            <p class="text-xs text-red-600 mt-1 pl-6">Memerlukan Data Gempa (1) & Tsunami Terekam (5).</p>
+                            <!-- END KETERANGAN -->
+                        </label>
+                        <!-- END OPSI BARU -->
+                        <label class="p-3 border border-yellow-300 rounded-lg cursor-pointer hover:bg-yellow-50 transition-colors bg-yellow-100/50">
                             <input type="radio" name="tsunami_status" value="Tidak Berpotensi Tsunami" class="form-radio h-4 w-4 text-yellow-600">
-                            <span class="ml-3 text-sm font-medium text-yellow-700">Tidak Berpotensi Tsunami</span>
+                            <span class="ml-3 text-base font-medium text-yellow-700">Tidak Berpotensi Tsunami</span>
+                             <!-- KETERANGAN BARU -->
+                            <p class="text-xs text-yellow-600 mt-1 pl-6">Memerlukan Data Gempa (1) saja.</p>
+                            <!-- END KETERANGAN -->
                         </label>
-                        <label class="flex items-center p-3 border border-green-300 rounded-lg cursor-pointer hover:bg-green-50 transition-colors bg-green-100/50">
+                        <label class="p-3 border border-green-300 rounded-lg cursor-pointer hover:bg-green-50 transition-colors bg-green-100/50">
                             <input type="radio" name="tsunami_status" value="Tsunami Telah Berakhir" class="form-radio h-4 w-4 text-green-600">
-                            <span class="ml-3 text-sm font-medium text-green-700">Tsunami Telah Berakhir</span>
+                            <span class="ml-3 text-base font-medium text-green-700">Tsunami Telah Berakhir</span>
+                            <!-- KETERANGAN BARU -->
+                            <p class="text-xs text-green-600 mt-1 pl-6">Memerlukan Data Gempa (1) & Tsunami Terekam (5) (Resume).</p>
+                            <!-- END KETERANGAN -->
                         </label>
                     </div>
-                    <!-- ESTIMASI GUNCANGAN DIHAPUS DARI SINI -->
                 </div>
 
-                <!-- Section 3: Data Wilayah Terdampak (CSV 2) -->
-                <div>
-                    <h2 class="text-2xl font-semibold leading-7 text-gray-900 mb-4">3. Data Wilayah Berpotensi Terdampak</h2>
+                <!-- Section 3: Data Wilayah Terdampak (CSV 2 - International) -->
+                <div class="border-b border-gray-200 pb-8">
+                    <h2 class="text-2xl font-semibold leading-7 text-gray-900 mb-4">3. Data Wilayah Berpotensi Terdampak (Global)</h2>
                     <p class="text-sm leading-6 text-gray-600">Gunakan format CSV: **lokasi,negara,lat,long,eta**. Masukkan data wilayah terdampak (bisa lebih dari satu baris).</p>
                     <div class="mt-4">
                         <textarea id="csv2-input" name="csv2_input" rows="6" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3 text-sm" placeholder="lokasi,negara,lat,long,eta
-"></textarea>
+Kuril Islands,Russia,45.3,149.0,2025-09-25T17:15:00Z
+Hokkaido,Jepang,42.5,145.0,2025-09-25T17:45:00Z
+Maui,USA,20.79, -156.33, 2025-09-25T20:00:00Z
+Mexico City,Mexico,19.43,-99.13,2025-09-25T22:30:00Z
+Lima,Peru,-12.04,-77.04,2025-09-26T01:00:00Z
+Sydney,Australia,-33.86,151.20,2025-09-26T03:00:00Z
+Auckland,NZ,-36.84,174.76,2025-09-26T04:00:00Z
+Manila,Philippines,14.59,120.98,2025-09-26T05:30:00Z
+Vancouver,Canada,49.28,-123.12,2025-09-26T07:00:00Z"></textarea>
+                    </div>
+                </div>
+
+                <!-- Section 4: Data Wilayah Terdampak (CSV 4 - BMKG) -->
+                <div class="border-b border-gray-200 pb-8">
+                    <h2 class="text-2xl font-semibold leading-7 text-gray-900 mb-4">4. Data Wilayah Berpotensi Terdampak (BMKG)</h2>
+                    <p class="text-sm leading-6 text-gray-600">Gunakan format CSV: **provinsi,kotakab,status,eta**. Hanya untuk wilayah Indonesia.</p>
+                    <div class="mt-4">
+                        <textarea id="csv-bmkg-input" name="csv_bmkg_input" rows="4" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3 text-sm" placeholder="provinsi,kotakab,status,eta
+SULAWESI UTARA,KEPULAUAN SANGIHE,AWAS,2025-09-25T16:55:00Z
+PAPUA,JAYAPURA,Siaga,2025-09-25T17:15:00Z
+SULUT,KEPULAUAN TALAUD,Waspada,2025-09-25T17:45:00Z
+MALUT,HALMAHERA UTARA,Waspada,2025-09-26T01:00:00Z
+NTT,KABUPATEN ALOR,Waspada,2025-09-26T01:30:00Z
+MALUKU,KOTA AMBON,Siaga,2025-09-26T02:00:00Z
+BANTEN,PANDEGLANG,Waspada,2025-09-26T02:30:00Z
+SUMUT,NIAS SELATAN,Siaga,2025-09-26T03:00:00Z
+ACEH,PULAU SIMEULUE,Waspada,2025-09-26T03:30:00Z
+PAPUABAR,MANOKWARI,Waspada,2025-09-26T04:00:00Z
+SULSEL,KABUPATEN SELAYAR,Siaga,2025-09-26T04:30:00Z
+MALUKU UTARA,KABUPATEN PULAU MOROTAI,AWAS,2025-09-26T05:00:00Z"></textarea>
+                    </div>
+                </div>
+
+                <!-- Section 5: Data Tsunami Terekam (CSV 5 - Recorded) -->
+                <div>
+                    <h2 class="text-2xl font-semibold leading-7 text-gray-900 mb-4">5. Data Tsunami Terekam (Observed)</h2>
+                    <p class="text-sm leading-6 text-gray-600">Gunakan format CSV: **lokasi1,lokasi2,lat,long,tinggi,waktu**.</p>
+                    <div class="mt-4">
+                        <textarea id="csv-recorded-input" name="csv_recorded_input" rows="4" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3 text-sm" placeholder="lokasi1,lokasi2,lat,long,tinggi,waktu
+Fukushima,Jepang,37.5,141.0,0.25,2025-09-25T18:00:00Z
+Kilauea,Hawaii,19.5,-155.0,0.85,2025-09-25T21:30:00Z
+Hilo,Hawaii,19.7,-155.1,1.5,2025-09-26T01:00:00Z
+Valparaiso,Chile,-33.0,-71.6,4.5,2025-09-26T04:30:00Z
+Lombok,Indonesia,-8.5,116.0,12.5,2025-09-26T06:00:00Z"></textarea>
                     </div>
                 </div>
 
@@ -220,22 +400,62 @@
                     <!-- RIGHT BLOCK: STATUS & AREA LIST (White Background) -->
                     <div class="status-area-block">
                         <!-- Tsunami Status (Top Right - Colored Banner) -->
-                        <p id="display-tsunami" class="font-extrabold text-lg text-center p-4 transition-colors border-none" style="padding-top: 1.5rem; padding-bottom: 1rem;"></p>
+                        <p id="display-tsunami" class="font-extrabold text-xl transition-colors border-none p-4 flex items-center justify-center" style="padding-top: 1.25rem; padding-bottom: 1.25rem;"></p>
 
-                        <!-- Location & Guncangan (White Area) - KONTEN INI DIHAPUS / DIGANTI -->
-                        <div id="detail-content-wrapper" class="p-4 flex flex-col justify-center items-center h-full">
+                        <!-- Area Terdampak (White Area) -->
+                        <div id="detail-content-wrapper" class="p-4 flex flex-col justify-center items-center h-full" style="padding-top: 0; padding-bottom: 0.5rem;">
                             
-                            <!-- Wilayah Terdampak List (Hanya muncul jika Berpotensi Tsunami) -->
-                            <div id="area-terdampak-list" class="w-full hidden">
-                                <h4 class="font-bold text-base text-red-600 mb-2 text-center">Wilayah Berpotensi Terdampak</h4>
+                            <!-- Wilayah Tsunami Terekam (CSV 5 - New Highest Priority) -->
+                            <div id="area-tsunami-recorded-list" class="w-full hidden pb-4">
+                                <h4 class="list-header font-bold text-base text-red-600 text-center">Tsunami Terekam (Observed)</h4>
+                                <table id="recorded-table" class="compact-table">
+                                    <thead>
+                                        <tr>
+                                            <th class="w-1/4">Lokasi</th>
+                                            <th class="w-1/4">Region</th>
+                                            <th class="w-1/5 text-center">Tinggi (m)</th>
+                                            <th class="w-1/4">Waktu</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recorded-table-body">
+                                        <!-- Populated by JS -->
+                                    </tbody>
+                                </table>
+                                <p id="total-recorded-caption" class="mt-0.1 text-xs text-gray-500 text-center"></p>
+                            </div>
+
+                            <!-- Wilayah Terdampak BMKG List (CSV 4 - Domestik) -->
+                            <div id="area-terdampak-bmkg-list" class="w-full hidden">
+                                <h4 class="list-header font-bold text-base text-red-600 text-center" style="margin-top: 0; margin-bottom: 0.1rem;">Wilayah Peringatan Dini (BMKG)</h4>
+                                <table id="bmkg-table" class="compact-table">
+                                    <thead>
+                                        <tr>
+                                            <!-- Perluasan lebar Kota/Kab dan Pengecilan ETA -->
+                                            <th class="w-1/4">Provinsi</th>
+                                            <th class="w-2/5">Kota/Kab</th>
+                                            <th class="w-1/6 text-center">Status</th>
+                                            <th class="w-1/5">ETA</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="bmkg-table-body">
+                                        <!-- Populated by JS -->
+                                    </tbody>
+                                </table>
+                                <!-- CAPTION BARU: Hanya tampil jika > 10 data yang dimasukkan -->
+                                <p id="total-bmkg-caption" class="mt-0.1 text-xs text-gray-500 text-center"></p>
+                            </div>
+                            
+                            <!-- Wilayah Terdampak List (CSV 3 - Global) -->
+                            <div id="area-terdampak-list" class="w-full hidden pb-4">
+                                <h4 class="list-header font-bold text-base text-red-600 mb-2 text-center">Wilayah Berpotensi Terdampak (Global)</h4>
                                 <ul id="terdampak-list" class="space-y-1 text-sm text-gray-700">
                                     <!-- Populated by JS -->
                                 </ul>
                                 <!-- Caption Total Wilayah -->
                                 <p id="total-areas-caption" class="mt-2 text-xs text-gray-500 text-center"></p>
                             </div>
-                            
-                            <!-- Tidak Berpotensi Tsunami Placeholder (Center) -->
+
+                            <!-- Placeholder (Center) -->
                             <div id="no-potential-area" class="text-base text-gray-500 text-center flex-grow flex items-center justify-center hidden">
                                 <p id="placeholder-text">Tidak ada wilayah berpotensi tsunami</p>
                             </div>
@@ -272,17 +492,58 @@
 
         // Data input global
         let sourceData = null;
-        let affectedAreas = [];
+        let affectedAreas = []; // CSV 3: Global (Potensi)
+        let affectedAreasBMKG = []; // CSV 4: BMKG (Peringatan Dini)
+        let recordedAreas = []; // CSV 5: Recorded (Terekam/Observed)
         let tsunamiStatus = "";
-        // guncanganMMI DIHAPUS
         let map = null;
         
         // Mapping status ke warna dan emoji
         const TSUNAMI_STATUS_MAP = {
-            "Berpotensi Tsunami": { color: 'red', emoji: '🔴', tailwind: 'text-white bg-red-900', map_color: '#DC2626' }, // Merah gelap
-            "Tidak Berpotensi Tsunami": { color: 'green', emoji: '🟡', tailwind: 'text-white bg-green-900', map_color: '#059669' }, // Hijau gelap
-            "Tsunami Telah Berakhir": { color: 'green', emoji: '🟢', tailwind: 'text-white bg-green-900', map_color: '#059669' } // Hijau gelap
+            "Berpotensi Tsunami": { color: 'red', emoji: '🔴', tailwind: 'text-white bg-red-900', map_color: '#DC2626' }, 
+            // OPSI BARU
+            "TSUNAMI MASIH BERLANGSUNG": { color: 'red', emoji: '⚠️', tailwind: 'text-white bg-red-900', map_color: '#DC2626' },
+            // END OPSI BARU
+            "Tidak Berpotensi Tsunami": { color: 'green', emoji: '🟡', tailwind: 'text-white bg-green-900', map_color: '#059669' }, 
+            "Tsunami Telah Berakhir": { color: 'green', emoji: '🟢', tailwind: 'text-white bg-green-900', map_color: '#059669' } 
         };
+        const BMKG_STATUS_MAP = {
+            // AWAS DITAMBAHKAN
+            "AWAS": { class: 'status-awas' },
+            "SIAGA": { class: 'status-siaga' },
+            "WASPADA": { class: 'status-waspada' },
+        };
+        // MAPPING WARNA KETINGGIAN TSUNAMI TEREKAM (NEW)
+        function getRecordedHeightClass(height) {
+            if (height >= 10.0) return 'h-10-plus'; // Ungu
+            if (height >= 3.0) return 'h-3-10'; // Merah
+            if (height >= 1.0) return 'h-1-3'; // Orange
+            if (height >= 0.3) return 'h-03-1'; // Kuning
+            if (height >= 0.05) return 'h-005-03'; // Biru Muda
+            return 'bg-gray-400'; // Default jika di bawah 0.05m
+        }
+        
+        /**
+         * Mendapatkan Z-Index Offset berdasarkan ketinggian tsunami (Tinggi > Z-Index Tinggi)
+         */
+        function getHeightZIndexOffset(height) {
+            if (height >= 10.0) return 1000; 
+            if (height >= 3.0) return 900; 
+            if (height >= 1.0) return 800; 
+            if (height >= 0.3) return 700; 
+            if (height >= 0.05) return 600; 
+            return 500; 
+        }
+        
+        // Data Legenda untuk ditampilkan
+        const HEIGHT_LEGEND_DATA = [
+            { range: '> 10 m', class: 'h-10-plus' },
+            { range: '3 - 10 m', class: 'h-3-10' },
+            { range: '1 - 3 m', class: 'h-1-3' },
+            { range: '0.3 - 1 m', class: 'h-03-1' },
+            { range: '0.05 - 0.3 m', class: 'h-005-03' },
+        ];
+
 
         /**
          * Fungsi untuk menampilkan pesan error di UI
@@ -318,24 +579,21 @@
             const data = [];
             for (let i = 1; i < lines.length; i++) {
                 // REGEX PERBAIKAN: Lebih ketat menangani pemisahan koma, termasuk yang ada di dalam tanda kutip.
-                // Masalah sebelumnya: Nilai numerik bisa terpotong atau terikat pada string sebelumnya.
                 const values = lines[i].match(/(?:[^,"]+|"[^"]*")+/g) || [];
 
                 // Pembersihan data dan pemastian jumlah kolom
-                const cleanedValues = values.map(v => v.trim().replace(/^"|"$/g, ''));
+                let cleanedValues = values.map(v => v.trim().replace(/^"|"$/g, ''));
                 
                 if (cleanedValues.length !== headers.length) {
-                    // Coba perbaiki: Jika lokasi berisi koma, regex bisa gagal. Coba fallback:
-                    // Jika headers adalah 5 (CSV 2: lokasi,negara,lat,long,eta), dan values > 5, gabungkan sisa ke lokasi
-                    if (expectedHeaders.length === 5 && cleanedValues.length > 5) {
-                        const lokasi = cleanedValues.slice(0, cleanedValues.length - 4).join(', ');
-                        const rest = cleanedValues.slice(cleanedValues.length - 4);
-                        cleanedValues.splice(0, cleanedValues.length, lokasi, ...rest);
-                        if (cleanedValues.length !== 5) {
-                             throw new Error(`Baris ${i + 1} memiliki jumlah kolom yang salah. Diharapkan ${headers.length}, Ditemukan ${cleanedValues.length}`);
-                        }
-                    } else {
-                         throw new Error(`Baris ${i + 1} memiliki jumlah kolom yang salah. Diharapkan ${headers.length}, Ditemukan ${cleanedValues.length}`);
+                    // Logic Fallback untuk jumlah kolom yang salah (misalnya, nama lokasi mengandung koma)
+                    if (cleanedValues.length > headers.length) {
+                         const excessCols = cleanedValues.length - headers.length;
+                         // Gabungkan kelebihan kolom ke kolom Lokasi/Lokasi1
+                         const combinedPrefix = cleanedValues.slice(0, 1 + excessCols).join(', ');
+                         cleanedValues = [combinedPrefix, ...cleanedValues.slice(1 + excessCols)];
+
+                    } else if (cleanedValues.length < headers.length) {
+                        throw new Error(`Baris ${i + 1} memiliki jumlah kolom yang kurang. Diharapkan ${headers.length}, Ditemukan ${cleanedValues.length}`);
                     }
                 }
                 
@@ -344,21 +602,28 @@
                     row[header] = cleanedValues[index];
                 });
 
-                // Konversi numerik dan koordinat
+                // Konversi numerik
                 if (row.lat) row.lat = parseFloat(row.lat);
                 if (row.long) row.long = parseFloat(row.long);
                 if (row.mag) row.mag = parseFloat(row.mag);
                 if (row.kedalaman) row.kedalaman = parseFloat(row.kedalaman);
+                if (row.tinggi) row.tinggi = parseFloat(row.tinggi); // TINGGI BARU
 
                 // Validasi data penting
-                // Khusus untuk CSV 2, hanya lat/long yang diperiksa, bukan mag
-                const isNumericCheck = (expectedHeaders.includes('mag') || expectedHeaders.includes('kedalaman')) ? 
-                                      (isNaN(row.lat) || isNaN(row.long) || isNaN(row.mag)) : 
-                                      (isNaN(row.lat) || isNaN(row.long));
+                const isNumericCheck = (expectedHeaders.includes('lat') && expectedHeaders.includes('long')) ? 
+                                      (isNaN(row.lat) || isNaN(row.long)) : false;
 
                 if (isNumericCheck) {
                     throw new Error(`Baris ${i + 1}: Data numerik (Lat/Long) tidak valid.`);
                 }
+                
+                if (expectedHeaders.includes('mag') && isNaN(row.mag)) {
+                    throw new Error(`Baris ${i + 1}: Data numerik (Magnitudo) tidak valid.`);
+                }
+                if (expectedHeaders.includes('tinggi') && isNaN(row.tinggi)) {
+                    throw new Error(`Baris ${i + 1}: Data numerik (Tinggi) tidak valid.`);
+                }
+
                 data.push(row);
             }
             return data;
@@ -366,7 +631,6 @@
 
         /**
          * Mendapatkan radius lingkaran perkiraan jangkauan berdasarkan Magnitudo.
-         * Jarak diberikan dalam meter (untuk Leaflet).
          */
         function getRadiusByMagnitude(mag) {
             if (mag < 6) return [10000, 30000, 60000]; 
@@ -380,7 +644,6 @@
          */
         function formatWaktu(isoString, formatType = 'tampilan') {
             if (!isoString) return 'Waktu Tidak Valid';
-            // Pastikan kita mengambil waktu dari ISO string dan mengatur offset ke WIB (+07:00)
             const wibMoment = moment.utc(isoString).utcOffset('+07:00');
 
             if (!wibMoment.isValid()) {
@@ -388,27 +651,26 @@
             }
 
             if (formatType === 'koordinat') {
-                // Format yang ditampilkan di blok berwarna (2 baris)
                 const formattedDate = wibMoment.format('DD MMMM YYYY');
                 const formattedTime = wibMoment.format('HH:mm:ss');
                 
-                // Mengembalikan HTML untuk 2 baris
+                /* PENYESUAIAN: Membuat tampilan Tanggal dan Waktu menjadi 2 baris */
                 return `
-                    <div class="flex items-center space-x-2 text-sm justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                        <p class="font-semibold text-white">${formattedDate}</p>
+                    <div class="flex items-center space-x-1 justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                        <p class="font-semibold text-white leading-tight">${formattedDate}</p>
                     </div>
-                    <div class="text-center text-sm font-semibold mt-1">
+                    <div class="text-center font-semibold mt-0.5 leading-tight">
                         ${formattedTime} WIB
                     </div>
                 `;
             } else if (formatType === 'eta') {
-                // E.g., 04/10/2025 10:50 WIB
-                const formattedDate = wibMoment.format('DD/MM/YYYY');
-                const formattedTime = wibMoment.format('HH:mm');
-                return `${formattedDate} ${formattedTime} WIB`;
-            } else { // 'narasi' format
-                // E.g., 25 September 2025 23:44:55 WIB
+                // FORMAT ETA: DD/MM HH:mm
+                return wibMoment.format('DD/MM HH:mm');
+            } else if (formatType === 'header') {
+                // FORMAT HEADER: 09 JANUARI 2024 03:48 WIB (sampai menit)
+                return wibMoment.format('DD MMMM YYYY HH:mm') + ' WIB';
+            } else { // 'narasi' format lengkap
                 return wibMoment.format('DD MMMM YYYY HH:mm:ss') + ' WIB';
             }
         }
@@ -417,44 +679,102 @@
          * Membuat narasi siap publikasi.
          */
         function generateNarasi(data) {
-            const publishedTime = moment().utcOffset('+07:00').format('DD/MM/YYYY HH:mm');
-            const waktuWIB = formatWaktu(data.waktu, 'narasi');
-            const status = data.tsunamiStatus.toUpperCase();
-            const statusEmoji = TSUNAMI_STATUS_MAP[data.tsunamiStatus].emoji;
+            const publishedTime = moment().utcOffset('+07:00').format('DD/MM/YYYY HH:mm') + ' WIB';
+            
+            const waktuHeader = formatWaktu(data.waktu, 'header');
+            
+            let headerType;
+            let resultPhrase;
+            let isDetailRequired = false;
 
-            let narasi = `${statusEmoji} [INFO GEMPA & PERINGATAN TSUNAMI] ${statusEmoji}
-MAG: ${data.mag.toFixed(1)} Mw
-KEDALAMAN: ${data.kedalaman} Km
-LOKASI: ${data.lokasi}
-KOORDINAT: ${data.lat.toFixed(2)} ${data.lat >= 0 ? 'LU' : 'LS'}, ${data.long.toFixed(2)} ${data.long >= 0 ? 'BT' : 'BB'}
-WAKTU GEMPA: ${waktuWIB}
+            // LOGIKA BARU UNTUK TSUNAMI TEREKAM
+            const hasRecordedAreas = recordedAreas.length > 0;
 
-STATUS TSUNAMI: **${status}**
-`;
-
-            if (affectedAreas.length > 0 && data.tsunamiStatus === "Berpotensi Tsunami") {
-                narasi += "\nWILAYAH BERPOTENSI TERDAMPAK (ESTIMASI WAKTU TIBA):\n";
-                // Hanya tampilkan 6 wilayah pertama di narasi
-                const displayAreas = affectedAreas.slice(0, 6);
-                displayAreas.forEach(area => {
-                    const etaWIB = formatWaktu(area.eta, 'eta');
-                    narasi += `• ${area.lokasi}, ${area.negara} (ETA: ${etaWIB})\n`;
-                });
+            if (data.tsunamiStatus === "Tsunami Telah Berakhir") {
+                headerType = "INFORMASI TSUNAMI"; // Tanpa kata POTENSI
+                resultPhrase = "GEMPA TIDAK BERPOTENSI TSUNAMI";
                 
-                if (affectedAreas.length > 6) {
-                    narasi += `... dan ${affectedAreas.length - 6} wilayah lainnya.\n`;
+                // Jika Tsunami Terekam (CSV 5) ada, maka dianggap sebagai resume
+                if (hasRecordedAreas) {
+                    resultPhrase = "TSUNAMI TELAH BERAKHIR"; // Hapus **
+                    isDetailRequired = true; // Aktifkan detail untuk menampilkan resume
                 }
-                narasi += "\n";
-            } else if (data.tsunamiStatus === "Tsunami Telah Berakhir") {
-                narasi += "\nPeringatan Tsunami Dinyatakan **Telah Berakhir**. Warga diimbau untuk kembali ke rumah dengan waspada.\n\n";
-            } else if (data.tsunamiStatus === "Berpotensi Tsunami" && affectedAreas.length === 0) {
-                 narasi += "\nDaftar wilayah berpotensi terdampak segera disampaikan.\n\n";
-            } else {
-                narasi += "\nGempa ini **Tidak Berpotensi Tsunami**. Tetap waspada terhadap gempa susulan.\n\n";
+                
+            } else if (data.tsunamiStatus === "Berpotensi Tsunami") {
+                headerType = "INFORMASI POTENSI TSUNAMI";
+                resultPhrase = "GEMPA BERPOTENSI TSUNAMI"; // Hapus **
+                isDetailRequired = true;
+            
+            } else if (data.tsunamiStatus === "TSUNAMI MASIH BERLANGSUNG") { // OPSI BARU
+                headerType = "INFORMASI TSUNAMI";
+                resultPhrase = "TSUNAMI MASIH BERLANGSUNG"; // Hapus **
+                isDetailRequired = true;
+
+            } else { // Tidak Berpotensi Tsunami
+                headerType = "INFORMASI POTENSI TSUNAMI";
+                resultPhrase = "GEMPA TIDAK BERPOTENSI TSUNAMI";
             }
 
-            narasi += `Data Olahan Internal. Dipublikasikan pada ${publishedTime} WIB.
-#Gempa #Tsunami #PeringatanDini #${status.replace(/ /g, '')}`;
+            // --- HEADER ---
+            let narasi = `${headerType} AKIBAT GEMPA M${data.mag.toFixed(1)} ${data.lokasi} ${waktuHeader}\n\n`;
+
+            // --- ISI ---
+            narasi += `HASIL PEMODELAN TERBARU MENUNJUKKAN BAHWA ${resultPhrase}`;
+            
+            // Tambahkan frasa rincian hanya jika diperlukan (selain Tidak Berpotensi Tsunami)
+            if (isDetailRequired && data.tsunamiStatus !== "Tidak Berpotensi Tsunami") {
+                narasi += " DENGAN RINCIAN SEBAGAI BERIKUT :\n";
+                
+                // --- RINCIAN WILAYAH (PRIORITAS) ---
+                const hasGlobalAreas = affectedAreas.length > 0;
+                const hasBMKGAreas = affectedAreasBMKG.length > 0;
+
+                if (hasRecordedAreas && (data.tsunamiStatus === "Tsunami Telah Berakhir" || data.tsunamiStatus === "TSUNAMI MASIH BERLANGSUNG")) {
+                    // Prioritas 1: Tsunami Terekam (JIKA STATUS = BERLANGSUNG / TELAH BERAKHIR)
+                    recordedAreas.sort((a, b) => moment.utc(a.waktu).diff(moment.utc(b.waktu)));
+
+                    narasi += "\n-- TSUNAMI TEREKAM (OBSERVASI) --\n";
+                    recordedAreas.forEach(area => {
+                        const waktuWIB = formatWaktu(area.waktu, 'eta');
+                        narasi += `• ${area.lokasi1} - ${area.lokasi2}: ${area.tinggi.toFixed(2)} meter (Waktu: ${waktuWIB})\n`;
+                    });
+
+                } else if (hasBMKGAreas) {
+                    // Prioritas 2: BMKG (TAMPILKAN SEMUA DI NARASI)
+                    affectedAreasBMKG.sort((a, b) => moment.utc(a.eta).diff(moment.utc(b.eta)));
+
+                    narasi += "\n-- PERINGATAN DINI TSUNAMI (BMKG) --\n";
+                    affectedAreasBMKG.forEach(area => {
+                        const etaWIB = formatWaktu(area.eta, 'eta');
+                        narasi += `• ${area.provinsi} - ${area.kotakab}: ${area.status.toUpperCase()} (ETA: ${etaWIB})\n`;
+                    });
+                
+                } else if (hasGlobalAreas) {
+                    // Prioritas 3: Global (TAMPILKAN SEMUA DI NARASI)
+                    affectedAreas.sort((a, b) => moment.utc(a.eta).diff(moment.utc(b.eta)));
+
+                    narasi += "\n-- WILAYAH BERPOTENSI TERDAMPAK (GLOBAL) --\n";
+                    affectedAreas.forEach(area => {
+                        const etaWIB = formatWaktu(area.eta, 'eta');
+                        narasi += `• ${area.lokasi}, ${area.negara} (ETA: ${etaWIB})\n`;
+                    });
+
+                } else {
+                     // Prioritas 4: Belum ada data
+                     narasi += "\n\nDaftar wilayah berpotensi terdampak segera disampaikan.\n";
+                }
+            } else {
+                 // Jika Tidak Berpotensi Tsunami, tutup baris narasi
+                 narasi += "\n";
+            }
+            
+            // --- REKOMENDASI ---
+            narasi += "\n[REKOMENDASI]\n-";
+            
+            // --- FOOTER ---
+            narasi += "\n\nData oleh ???";
+            narasi += "\nSumber : ???";
+            narasi += `\nDipublikasikan ${publishedTime}`;
 
             return narasi;
         }
@@ -469,9 +789,10 @@ STATUS TSUNAMI: **${status}**
             const formData = new FormData(e.target);
 
             const csv1Text = formData.get('csv1_input');
-            const csv2Text = formData.get('csv2_input');
+            const csv2Text = formData.get('csv2_input'); // Global
+            const csvBMKGText = formData.get('csv_bmkg_input'); // BMKG
+            const csvRecordedText = formData.get('csv_recorded_input'); // Recorded (NEW)
             const selectedStatus = formData.get('tsunami_status');
-            // guncanganMMI DIHAPUS DARI FORM DATA
 
             if (!selectedStatus) {
                 displayError("Mohon pilih status peringatan tsunami.");
@@ -494,18 +815,42 @@ STATUS TSUNAMI: **${status}**
                 return;
             }
 
-            // 2. Parse CSV 2 (Affected Areas)
+            // 2. Parse CSV 2 (Affected Areas - Global)
             try {
                 const expected2 = ['lokasi', 'negara', 'lat', 'long', 'eta'];
                 affectedAreas = parseCSV(csv2Text, expected2);
             } catch (error) {
-                // Jangan tampilkan error jika CSV 2 kosong, karena ini skenario yang valid (menunggu data)
-                if (csv2Text.trim() !== 'lokasi,negara,lat,long,eta') {
-                    displayError(`Kesalahan Data Wilayah Terdampak: ${error.message}`);
+                if (csv2Text.trim().toLowerCase() !== expected2.join(',')) {
+                    displayError(`Kesalahan Data Wilayah Terdampak (Global): ${error.message}`);
                     return;
                 }
-                affectedAreas = []; // Tetapkan array kosong
+                affectedAreas = []; 
             }
+            
+            // 3. Parse CSV BMKG (Affected Areas - Domestik)
+            try {
+                const expectedBMKG = ['provinsi', 'kotakab', 'status', 'eta'];
+                affectedAreasBMKG = parseCSV(csvBMKGText, expectedBMKG);
+            } catch (error) {
+                 if (csvBMKGText.trim().toLowerCase() !== expectedBMKG.join(',')) {
+                    displayError(`Kesalahan Data Wilayah Terdampak (BMKG): ${error.message}`);
+                    return;
+                }
+                affectedAreasBMKG = [];
+            }
+            
+            // 4. Parse CSV 5 (Recorded Areas - NEW)
+            try {
+                const expectedRecorded = ['lokasi1', 'lokasi2', 'lat', 'long', 'tinggi', 'waktu'];
+                recordedAreas = parseCSV(csvRecordedText, expectedRecorded);
+            } catch (error) {
+                 if (csvRecordedText.trim().toLowerCase() !== expectedRecorded.join(',')) {
+                    displayError(`Kesalahan Data Tsunami Terekam: ${error.message}`);
+                    return;
+                }
+                recordedAreas = [];
+            }
+
 
             // Lanjut ke visualisasi
             showVisualizationPage();
@@ -515,7 +860,6 @@ STATUS TSUNAMI: **${status}**
          * Menginisialisasi dan menampilkan peta Leaflet
          */
         function initializeMap() {
-            // Hapus peta yang sudah ada (jika ada) untuk menghindari error
             if (map) {
                 map.remove();
                 map = null;
@@ -523,8 +867,6 @@ STATUS TSUNAMI: **${status}**
 
             const centerLat = sourceData.lat;
             const centerLon = sourceData.long;
-
-            // Solusi World Wrap: Tetapkan pusat peta di Samudra Pasifik Tengah (~170 E)
             const pacificCenterLon = 170; 
             const pacificCenterLat = 0; 
 
@@ -532,119 +874,261 @@ STATUS TSUNAMI: **${status}**
                 center: [pacificCenterLat, pacificCenterLon], 
                 zoom: 4,
                 zoomControl: false,
-                // Pastikan wrapping horizontal aktif
                 worldCopyJump: true 
             });
 
-            // Basemap NatGeo World Map
             L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}', {
                 maxZoom: 16,
                 attribution: 'ESRI',
-                // Pastikan tile layer tidak membatasi wrapping
                 noWrap: false
             }).addTo(map);
+
+            // --- LOGO KUSTOM (Baru) ---
+            const LogoControl = L.Control.extend({
+                onAdd: function(map) {
+                    const img = L.DomUtil.create('img');
+                    img.src = 'logo.png'; 
+                    img.style.width = '60px'; 
+                    img.style.height = 'auto'; 
+                    img.onerror = function() {
+                        this.style.display = 'none'; // Sembunyikan jika gambar tidak ditemukan
+                    };
+                    return img;
+                },
+                onRemove: function(map) {
+                    // Do nothing
+                }
+            });
+
+            new LogoControl({ position: 'bottomleft' }).addTo(map);
+
+            // --- LEGENDA KETINGGIAN (NEW) ---
+            const HeightLegendControl = L.Control.extend({
+                onAdd: function(map) {
+                    const div = L.DomUtil.create('div', 'info-legend');
+                    div.innerHTML = '<strong>Tinggi Tsunami</strong>';
+                    HEIGHT_LEGEND_DATA.forEach(item => {
+                        const iconClass = item.class;
+                        
+                        // KOTAK BERWARNA SAJA (tanpa SVG)
+                        const colorDiv = L.DomUtil.create('div', `legend-square ${iconClass}`);
+                        colorDiv.style.width = '12px'; /* Lebar kotak */
+                        colorDiv.style.height = '12px'; /* Tinggi kotak */
+                        colorDiv.style.float = 'left';
+                        colorDiv.style.marginRight = '5px';
+                        colorDiv.style.borderRadius = '3px'; /* Sudut sedikit membulat untuk estetika */
+                        
+                        const span = L.DomUtil.create('span');
+                        span.innerHTML = `${item.range}`;
+                        
+                        const line = L.DomUtil.create('div');
+                        line.appendChild(colorDiv);
+                        line.appendChild(span);
+                        div.appendChild(line);
+                    });
+                    return div;
+                },
+                onRemove: function(map) {
+                    // Do nothing
+                }
+            });
+            
+            // --- MOVE BOOLEAN DECLARATIONS UP (FIX for ReferenceError) ---
+            const hasRecordedAreas = recordedAreas.length > 0;
+            const hasGlobalAreas = affectedAreas.length > 0;
+            const hasBMKGAreas = affectedAreasBMKG.length > 0;
+            // ------------------------------------------------------------
+            
+            // LOGIKA KONDISIONAL UNTUK MENAMPILKAN LEGENDA
+            if (hasRecordedAreas && (tsunamiStatus === "Tsunami Telah Berakhir" || tsunamiStatus === "TSUNAMI MASIH BERLANGSUNG")) {
+                new HeightLegendControl({ position: 'bottomleft' }).addTo(map);
+            }
+
 
             // --- UI Report Details ---
             const statusInfo = TSUNAMI_STATUS_MAP[tsunamiStatus];
             const mapColor = statusInfo.map_color; 
-            const statusEmoji = statusInfo.emoji;
 
             // === 1. UPDATE LEFT (COLORED) BLOCK ===
             const magTimeContainer = document.getElementById('mag-time-container');
-            
-            // Set dynamic background color
             magTimeContainer.style.backgroundColor = mapColor; 
-
-            // Set time (Date and Time)
             document.getElementById('display-time-container').innerHTML = formatWaktu(sourceData.waktu, 'koordinat');
-            
-            // Set Magnitude and Kedalaman
             document.getElementById('display-magnitude').textContent = sourceData.mag.toFixed(1);
             document.getElementById('display-kedalaman').textContent = `${sourceData.kedalaman} Km`;
 
 
             // === 2. UPDATE RIGHT (WHITE) BLOCK ===
-            
-            // Set Status Banner (Top Right)
             const tsunamiDisplay = document.getElementById('display-tsunami');
             tsunamiDisplay.textContent = tsunamiStatus.toUpperCase();
-            tsunamiDisplay.className = `font-extrabold text-lg text-center p-4 transition-colors border-none ${statusInfo.tailwind}`;
+            // MENGGUNAKAN PADDING VERTICAL YANG DITINGKATKAN UNTUK SENTRALISASI VERTIKAL
+            tsunamiDisplay.className = `font-extrabold text-xl transition-colors border-none p-4 flex items-center justify-center ${statusInfo.tailwind}`;
+            tsunamiDisplay.style.paddingTop = '1.25rem'; 
+            tsunamiDisplay.style.paddingBottom = '1.25rem'; 
 
-            // TIDAK PERLU UPDATE LOKASI ATAU GUNCANGAN
 
-            // === 3. MANAGE AREA TERDAMPAK LIST ===
+            // === 3. MANAGE AREA TERDAMPAK LISTS (PRIORITY LOGIC) ===
+            const recordedAreaDiv = document.getElementById('area-tsunami-recorded-list'); // NEW
+            const recordedTableBody = document.getElementById('recorded-table-body'); // NEW
+            const totalRecordedCaption = document.getElementById('total-recorded-caption'); // NEW
+
             const areaTerdampakDiv = document.getElementById('area-terdampak-list');
             const terdampakListUl = document.getElementById('terdampak-list');
             const totalAreasCaption = document.getElementById('total-areas-caption');
+            
+            const areaTerdampakBMKGDiv = document.getElementById('area-terdampak-bmkg-list');
+            const bmkgTableBody = document.getElementById('bmkg-table-body');
+            const totalBmkgCaption = document.getElementById('total-bmkg-caption');
+
             const noPotentialArea = document.getElementById('no-potential-area');
             const placeholderText = document.getElementById('placeholder-text');
 
+            terdampakListUl.innerHTML = '';
+            bmkgTableBody.innerHTML = ''; 
+            recordedTableBody.innerHTML = ''; // NEW
             
-            // GANTI JUDUL LIST MENJADI WILAYAH BERPOTENSI TERDAMPAK
-            const listTitle = areaTerdampakDiv.querySelector('h4');
-            if (listTitle) {
-                listTitle.textContent = "Wilayah Berpotensi Terdampak";
-            }
-            
-            terdampakListUl.innerHTML = ''; // Clear previous list
 
-            if (tsunamiStatus === "Berpotensi Tsunami" && affectedAreas.length > 0) {
-                // KONDISI 1: Berpotensi Tsunami, dan Data Wilayah ADA
-                areaTerdampakDiv.classList.remove('hidden');
-                noPotentialArea.classList.add('hidden');
+            // Sembunyikan semua list default
+            recordedAreaDiv.classList.add('hidden');
+            areaTerdampakDiv.classList.add('hidden');
+            areaTerdampakBMKGDiv.classList.add('hidden');
+            noPotentialArea.classList.add('hidden');
+
+            const GLOBAL_DISPLAY_LIMIT_FRAME = 9; 
+            const BMKG_DISPLAY_LIMIT_FRAME = 15;
+            const RECORDED_DISPLAY_LIMIT_FRAME = 15; // BATAS BARU
+
+            // LOGIKA PRIOTITAS TAMPILAN
+            if (hasRecordedAreas && (tsunamiStatus === "Tsunami Telah Berakhir" || tsunamiStatus === "TSUNAMI MASIH BERLANGSUNG")) {
+                // Prioritas 1: Tsunami Terekam (HANYA JIKA STATUS = BERLANGSUNG / TELAH BERAKHIR)
+                recordedAreaDiv.classList.remove('hidden');
                 
-                // Tentukan batas maksimum wilayah yang ditampilkan
-                const MAX_DISPLAY = 6;
-                const displayAreas = affectedAreas.slice(0, MAX_DISPLAY);
+                // Lakukan pengurutan data Terekam berdasarkan Tinggi (tertinggi ke terendah)
+                recordedAreas.sort((a, b) => b.tinggi - a.tinggi);
 
-                displayAreas.forEach(area => {
-                    const etaWIB = formatWaktu(area.eta, 'eta');
-                    terdampakListUl.innerHTML += `
-                        <li class="flex justify-between items-center pb-0.5">
-                            <span class="text-xs text-gray-700">${area.lokasi}, ${area.negara}</span>
-                            <span class="font-semibold text-xs text-red-600">${etaWIB}</span>
-                        </li>
+                const displayRecordedAreas = recordedAreas.slice(0, RECORDED_DISPLAY_LIMIT_FRAME);
+                
+                displayRecordedAreas.forEach(area => {
+                    const waktuWIB = formatWaktu(area.waktu, 'eta');
+                    const heightClass = getRecordedHeightClass(area.tinggi);
+                    
+                    recordedTableBody.innerHTML += `
+                        <tr>
+                            <td>${area.lokasi1}</td>
+                            <td>${area.lokasi2}</td>
+                            <td class="bmkg-center-content">
+                                <span class="recorded-height-cell ${heightClass}">${area.tinggi.toFixed(2)}</span>
+                            </td>
+                            <td>${waktuWIB}</td>
+                        </tr>
                     `;
                 });
-
-                // Tambahkan caption total jika ada lebih dari 6 wilayah
-                if (affectedAreas.length > MAX_DISPLAY) {
-                    totalAreasCaption.textContent = `... ${affectedAreas.length - MAX_DISPLAY} wilayah lainnya tidak ditampilkan.`;
+                
+                // LOGIKA CAPTION RECORDED BARU
+                if (recordedAreas.length > RECORDED_DISPLAY_LIMIT_FRAME) {
+                     totalRecordedCaption.textContent = `+ ${recordedAreas.length - RECORDED_DISPLAY_LIMIT_FRAME} observasi lokasi lainnya.`;
                 } else {
-                    totalAreasCaption.textContent = `Total ${affectedAreas.length} wilayah teridentifikasi.`;
+                     totalRecordedCaption.textContent = ``;
                 }
-            } else if (tsunamiStatus === "Berpotensi Tsunami" && affectedAreas.length === 0) {
-                // KONDISI 2: Berpotensi Tsunami, tetapi Data Wilayah BELUM ADA
-                areaTerdampakDiv.classList.add('hidden');
-                noPotentialArea.classList.remove('hidden');
-                placeholderText.textContent = "Daftar wilayah berpotensi terdampak segera disampaikan"; // Caption khusus
-                totalAreasCaption.textContent = ''; 
-            }
-            else {
-                // KONDISI 3: Tidak Berpotensi Tsunami ATAU Tsunami Telah Berakhir
-                areaTerdampakDiv.classList.add('hidden');
+
+            } else if (tsunamiStatus === "Berpotensi Tsunami") {
+                // KONDISI BERPOTENSI TSUNAMI (Prioritas BMKG > Global)
+                
+                if (hasBMKGAreas) {
+                    // Prioritas 2: BMKG (CSV 4)
+                    areaTerdampakBMKGDiv.classList.remove('hidden');
+                    affectedAreasBMKG.sort((a, b) => moment.utc(a.eta).diff(moment.utc(b.eta)));
+                    const displayBMKGAreas = affectedAreasBMKG.slice(0, BMKG_DISPLAY_LIMIT_FRAME);
+                    
+                    displayBMKGAreas.forEach(area => {
+                        const etaWIB = formatWaktu(area.eta, 'eta');
+                        const statusClass = BMKG_STATUS_MAP[area.status.toUpperCase()]?.class || '';
+                        
+                        bmkgTableBody.innerHTML += `
+                            <tr>
+                                <td>${area.provinsi}</td>
+                                
+                                <td>${area.kotakab}</td>
+                                <td class="bmkg-center-content">
+                                    <span class="bmkg-status-cell ${statusClass}">${area.status.toUpperCase()}</span>
+                                </td>
+                                <td>${etaWIB}</td>
+                            </tr>
+                        `;
+                    });
+                    
+                    if (affectedAreasBMKG.length > BMKG_DISPLAY_LIMIT_FRAME) {
+                         totalBmkgCaption.textContent = `+ ${affectedAreasBMKG.length - BMKG_DISPLAY_LIMIT_FRAME} wilayah Kab/Kota lainnya.`;
+                    } else {
+                         totalBmkgCaption.textContent = ``;
+                    }
+
+                } else if (hasGlobalAreas) {
+                    // Prioritas 3: Global (CSV 3)
+                    areaTerdampakDiv.classList.remove('hidden');
+                    affectedAreas.sort((a, b) => moment.utc(a.eta).diff(moment.utc(b.eta)));
+                    const displayAreas = affectedAreas.slice(0, GLOBAL_DISPLAY_LIMIT_FRAME); 
+
+                    displayAreas.forEach(area => {
+                        const etaWIB = formatWaktu(area.eta, 'eta');
+                        terdampakListUl.innerHTML += `
+                            <li class="flex justify-between items-center pb-0.5">
+                                <span class="text-xs text-gray-700">${area.lokasi}, ${area.negara}</span>
+                                <span class="font-semibold text-xs text-red-600">${etaWIB}</span>
+                            </li>
+                        `;
+                    });
+
+                    if (affectedAreas.length > GLOBAL_DISPLAY_LIMIT_FRAME) { 
+                        totalAreasCaption.textContent = `... ${affectedAreas.length - GLOBAL_DISPLAY_LIMIT_FRAME} wilayah lainnya tidak ditampilkan.`;
+                    } else {
+                        totalAreasCaption.textContent = `Total ${affectedAreas.length} wilayah teridentifikasi.`;
+                    }
+                    
+                } else {
+                    // Prioritas 4: Belum ada data
+                    noPotentialArea.classList.remove('hidden');
+                    placeholderText.textContent = "Daftar wilayah berpotensi terdampak segera disampaikan"; 
+                }
+
+            } else {
+                // KONDISI 5: Tidak Berpotensi Tsunami ATAU Tsunami Telah Berakhir (tanpa data Recorded)
                 noPotentialArea.classList.remove('hidden');
                 placeholderText.textContent = "Tidak ada wilayah berpotensi tsunami"; 
-                totalAreasCaption.textContent = ''; 
             }
+
 
             // Generate and display Narasi
             document.getElementById('narasi-gempa').textContent = generateNarasi({ 
                 ...sourceData, 
-                tsunamiStatus: tsunamiStatus,
-                guncanganMMI: "TIDAK TERSEDIA" // Dihapus dari input, set placeholder di Narasi
+                tsunamiStatus: tsunamiStatus
             });
 
 
             // --- MAP MARKERS AND ZOMM ---
+            // Marker peta selalu menggunakan data Global (CSV 3)
+
+            // Tsunami Icon (NEW)
+            const tsunamiIconSVG = (colorClass) => {
+                // Tentukan warna stroke (hitam untuk kuning, putih untuk lainnya)
+                let strokeColor = 'white';
+                if (colorClass === 'h-03-1') {
+                    strokeColor = 'black'; // Kuning -> Stroke Hitam
+                }
+                
+                return `
+                    <div class="recorded-wave-icon-container ${colorClass}" style="width: 30px; height: 30px; display: flex; justify-content: center; align-items: center; border-radius: 50%;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="${strokeColor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M2 15s1-2 2-2 2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2 1 2 2 2"/>
+                            <path d="M2 9s1-2 2-2 2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2 1 2 2 2"/>
+                        </svg>
+                    </div>
+                `;
+            }
             
-            // 1. MARKER SUMBER GEMPA (EPISENTER)
-            
-            // SVG Icon Gelombang Seismik (Gempa) yang lebih sederhana dan fokus
+            // Seismic Icon
             const seismicIconSVG = (color) => `
                 <div style="width: 30px; height: 30px; display: flex; justify-content: center; align-items: center; border-radius: 50%; background-color: white; box-shadow: 0 0 5px rgba(0,0,0,0.3);">
                     <svg class="seismic-icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <!-- Simbol gelombang seismik sederhana di tengah -->
                         <path d="M4 12h4l3-8 4 16 3-8h4"/>
                     </svg>
                 </div>
@@ -652,7 +1136,6 @@ STATUS TSUNAMI: **${status}**
 
             const sourceIcon = L.divIcon({
                 className: 'custom-div-icon',
-                // Menggunakan SVG Gelombang Seismik
                 html: seismicIconSVG(mapColor),
                 iconSize: [30, 30],
                 iconAnchor: [15, 15]
@@ -660,29 +1143,22 @@ STATUS TSUNAMI: **${status}**
 
             const markers = []; 
 
-            // FUNGSI UTAMA UNTUK MENAMBAHKAN MARKER BERULANG
-            function addWrappingMarker(lat, lon, icon) {
-                // Lokasi Asli
-                markers.push(L.marker([lat, lon], { icon: icon }).addTo(map));
-                // Lokasi Geser ke Timur (360 derajat)
-                markers.push(L.marker([lat, lon + 360], { icon: icon }).addTo(map));
-                // Lokasi Geser ke Barat (-360 derajat)
-                markers.push(L.marker([lat, lon - 360], { icon: icon }).addTo(map));
+            function addWrappingMarker(lat, lon, icon, zIndex = 500) {
+                markers.push(L.marker([lat, lon], { icon: icon, zIndexOffset: zIndex }).addTo(map));
+                markers.push(L.marker([lat, lon + 360], { icon: icon, zIndexOffset: zIndex }).addTo(map));
+                markers.push(L.marker([lat, lon - 360], { icon: icon, zIndexOffset: zIndex }).addTo(map));
             }
 
-            // Terapkan marker berulang untuk Episentrum
-            addWrappingMarker(centerLat, centerLon, sourceIcon);
+            // Marker Episentrum (Z-Index selalu tertinggi)
+            addWrappingMarker(centerLat, centerLon, sourceIcon, 2000);
 
-
-            // 3. Lingkaran Jangkauan Estetik (Juga harus berulang)
+            // Lingkaran Jangkauan
             const radii = getRadiusByMagnitude(sourceData.mag);
             const circleColor = mapColor; 
 
             radii.forEach((radius, index) => {
                 const fillOpacity = (0.3 - index * 0.1);
                 
-                // Tambahkan lingkaran di tiga salinan dunia
-                // Lokasi Asli
                 const circle = L.circle([centerLat, centerLon], { 
                     radius: radius, 
                     color: circleColor, 
@@ -691,7 +1167,6 @@ STATUS TSUNAMI: **${status}**
                     fillOpacity: fillOpacity 
                 }).addTo(map);
 
-                // Lokasi Geser ke Timur (+360)
                 L.circle([centerLat, centerLon + 360], { 
                     radius: radius, 
                     color: circleColor, 
@@ -700,7 +1175,6 @@ STATUS TSUNAMI: **${status}**
                     fillOpacity: fillOpacity
                 }).addTo(map);
 
-                // Lokasi Geser ke Barat (-360)
                 L.circle([centerLat, centerLon - 360], { 
                     radius: radius, 
                     color: circleColor, 
@@ -709,51 +1183,70 @@ STATUS TSUNAMI: **${status}**
                     fillOpacity: fillOpacity 
                 }).addTo(map);
 
-                // Hanya tambahkan lingkaran terluar asli ke markers untuk perhitungan batas
                 if (index === radii.length - 1) { 
                     markers.push(circle);
                 }
             });
 
-
-            // 2. MARKER WILAYAH TERDAMPAK (Juga harus berulang)
-            if (affectedAreas.length > 0 && tsunamiStatus === "Berpotensi Tsunami") {
+            // MARKER CSV 5 (TSUNAMI TEREKAM) - Dengan Z-Index berdasarkan Ketinggian
+            if (hasRecordedAreas && (tsunamiStatus === "Tsunami Telah Berakhir" || tsunamiStatus === "TSUNAMI MASIH BERLANGSUNG")) {
                 
-                // SVG Marker Segitiga Tanda Seru Ungu
+                // Urutkan data berdasarkan tinggi (tertinggi ke terendah) agar dirender dari bawah ke atas
+                recordedAreas.sort((a, b) => a.tinggi - b.tinggi); 
+
+                recordedAreas.forEach(area => {
+                    const heightClass = getRecordedHeightClass(area.tinggi);
+                    const zIndex = getHeightZIndexOffset(area.tinggi); // Dapatkan Z-Index Offset
+                    
+                    const recordedIcon = L.divIcon({
+                        className: 'recorded-wave-icon', 
+                        html: tsunamiIconSVG(heightClass),
+                        iconSize: [30, 30],
+                        iconAnchor: [15, 15]
+                    });
+
+                    // Tambahkan Marker dengan Z-Index Offset
+                    addWrappingMarker(area.lat, area.long, recordedIcon, zIndex);
+                });
+            }
+
+            // MARKER CSV 3 (POTENSI GLOBAL) - Dengan Wrapping (Marker Segitiga Ungu)
+            if (hasGlobalAreas && tsunamiStatus === "Berpotensi Tsunami") {
+                // SVG Segitiga yang lebih sederhana dan robust
                 const warningIconSVG = `
-                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="#6B21A8" stroke="#FFFFFF" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-                        <!-- Segitiga dengan warna ungu gelap (#6B21A8) -->
-                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" fill="#6B21A8"/>
-                        <!-- Tanda seru putih -->
-                        <line x1="12" y1="9" x2="12" y2="13" stroke="white" stroke-width="2"/>
-                        <line x1="12" y1="17" x2="12" y2="17" stroke="white" stroke-width="2"/>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" fill="#6B21A8" stroke="white" stroke-width="1.5"/>
+                        <line x1="12" y1="8" x2="12" y2="14" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+                        <circle cx="12" cy="17" r="1" fill="white"/>
                     </svg>
                 `;
                 
                 const warningIcon = L.divIcon({
-                    className: 'warning-icon', // Class ini tidak memiliki style default Leaflet
+                    // MENGHAPUS BACKGROUND YANG MENGGANGGU RENDERING
+                    className: 'global-warning-marker', 
                     html: warningIconSVG,
                     iconSize: [28, 28],
                     iconAnchor: [14, 14]
                 });
-
+                
+                // Marker Potensi Global (Z-Index standar 1000)
                 affectedAreas.forEach(area => {
-                    // Terapkan marker berulang untuk Wilayah Terdampak
-                    addWrappingMarker(area.lat, area.long, warningIcon);
+                    addWrappingMarker(area.lat, area.long, warningIcon, 1000); 
                 });
             }
 
-            // Zoom to fit all relevant elements (Hanya menggunakan markers asli, agar tidak zoom terlalu jauh)
-            const group = new L.featureGroup(markers.filter((m, i) => i < affectedAreas.length * 3 + 3)); // Filter agar hanya mengambil yang asli, atau setidaknya yang dibutuhkan untuk zoom
-            
-            // FIX ERROR: Tambahkan pengecekan validitas batas sebelum memanggil fitBounds
+            // Auto-Zoom: Hanya zoom ke markers jika ada recorded area atau global area
+            const allMarkers = markers.concat(
+                hasRecordedAreas ? recordedAreas.map(a => L.marker([a.lat, a.long])) : [],
+                (hasGlobalAreas && tsunamiStatus === "Berpotensi Tsunami") ? affectedAreas.map(a => L.marker([a.lat, a.long])) : []
+            );
+
+            const group = new L.featureGroup(allMarkers); 
             const bounds = group.getBounds();
             
-            if (bounds.isValid() && markers.length > 0) {
-                 // Gunakan fitBounds, tetapi batasi padding agar tidak terlalu zoom out.
+            if (bounds.isValid() && allMarkers.length > 0) {
                  map.fitBounds(bounds.pad(0.1));
             } else {
-                // Fallback: Gunakan center Pasifik yang sudah ditentukan
                 map.setView([pacificCenterLat, pacificCenterLon], 4);
             }
         }
@@ -777,7 +1270,6 @@ STATUS TSUNAMI: **${status}**
             document.getElementById('input-page').classList.add('hidden');
             document.getElementById('visualization-page').classList.remove('hidden');
             
-            // InvalidateSize diperlukan setelah container tampil (unhidden)
             setTimeout(initializeMap, 100);
         }
 
@@ -812,9 +1304,45 @@ STATUS TSUNAMI: **${status}**
         document.addEventListener('DOMContentLoaded', () => {
             setupCopyButton();
             
-            // Data awal kini kosong, tetapi header dipertahankan di placeholder
-            // document.getElementById('csv1-input').value = `mag,kedalaman,waktu,lat,long,lokasi\n7.1,10.0,2025-09-25T16:44:55Z,45.21,148.55,"Kepulauan Kuril Selatan"`;
-            // document.getElementById('csv2-input').value = `lokasi,negara,lat,long,eta\nKuril Islands,Russia,45.3,149.0,2025-09-25T17:15:00Z\nHokkaido,Jepang,42.5,145.0,2025-09-25T17:45:00Z\nMaui,USA,20.79, -156.33, 2025-09-25T20:00:00Z\nMexico City,Mexico,19.43,-99.13,2025-09-25T22:30:00Z\nLima,Peru,-12.04,-77.04,2025-09-26T01:00:00Z\nSydney,Australia,-33.86,151.20,2025-09-26T03:00:00Z\nAuckland,NZ,-36.84,174.76,2025-09-26T04:00:00Z\nManila,Philippines,14.59,120.98,2025-09-26T05:30:00Z\nVancouver,Canada,49.28,-123.12,2025-09-26T07:00:00Z`; 
+            // MENGEMBALIKAN PLACEHOLDER DATA LENGKAP
+            document.getElementById('csv1-input').value = ``;
+            document.getElementById('csv1-input').placeholder = `mag,kedalaman,waktu,lat,long,lokasi
+7.1,10.0,2025-09-25T16:44:55Z,45.21,148.55,"Kepulauan Kuril Selatan"`;
+            
+            document.getElementById('csv2-input').value = ``;
+            document.getElementById('csv2-input').placeholder = `lokasi,negara,lat,long,eta
+Kuril Islands,Russia,45.3,149.0,2025-09-25T17:15:00Z
+Hokkaido,Jepang,42.5,145.0,2025-09-25T17:45:00Z
+Maui,USA,20.79, -156.33, 2025-09-25T20:00:00Z
+Mexico City,Mexico,19.43,-99.13,2025-09-25T22:30:00Z
+Lima,Peru,-12.04,-77.04,2025-09-26T01:00:00Z
+Sydney,Australia,-33.86,151.20,2025-09-26T03:00:00Z
+Auckland,NZ,-36.84,174.76,2025-09-26T04:00:00Z
+Manila,Philippines,14.59,120.98,2025-09-26T05:30:00Z
+Vancouver,Canada,49.28,-123.12,2025-09-26T07:00:00Z`; 
+            
+            document.getElementById('csv-bmkg-input').value = ``;
+            document.getElementById('csv-bmkg-input').placeholder = `provinsi,kotakab,status,eta
+SULAWESI UTARA,KEPULAUAN SANGIHE,AWAS,2025-09-25T16:55:00Z
+PAPUA,JAYAPURA,Siaga,2025-09-25T17:15:00Z
+SULUT,KEPULAUAN TALAUD,Waspada,2025-09-25T17:45:00Z
+MALUT,HALMAHERA UTARA,Waspada,2025-09-26T01:00:00Z
+NTT,KABUPATEN ALOR,Waspada,2025-09-26T01:30:00Z
+MALUKU,KOTA AMBON,Siaga,2025-09-26T02:00:00Z
+BANTEN,PANDEGLANG,Waspada,2025-09-26T02:30:00Z
+SUMUT,NIAS SELATAN,Siaga,2025-09-26T03:00:00Z
+ACEH,PULAU SIMEULUE,Waspada,2025-09-26T03:30:00Z
+PAPUABAR,MANOKWARI,Waspada,2025-09-26T04:00:00Z
+SULSEL,KABUPATEN SELAYAR,Siaga,2025-09-26T04:30:00Z
+MALUKU UTARA,KABUPATEN PULAU MOROTAI,AWAS,2025-09-26T05:00:00Z`;
+            
+            document.getElementById('csv-recorded-input').value = ``;
+            document.getElementById('csv-recorded-input').placeholder = `lokasi1,lokasi2,lat,long,tinggi,waktu
+Fukushima,Jepang,37.5,141.0,0.25,2025-09-25T18:00:00Z
+Kilauea,Hawaii,19.5,-155.0,0.85,2025-09-25T21:30:00Z
+Hilo,Hawaii,19.7,-155.1,1.5,2025-09-26T01:00:00Z
+Valparaiso,Chile,-33.0,-71.6,4.5,2025-09-26T04:30:00Z
+Lombok,Indonesia,-8.5,116.0,12.5,2025-09-26T06:00:00Z`;
             
             document.querySelector('input[value="Berpotensi Tsunami"]').checked = true;
 
