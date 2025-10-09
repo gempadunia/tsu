@@ -168,6 +168,13 @@
             font-size: 0.7rem; /* Kecilkan font caption total */
         }
         
+        /* NEW STYLE untuk item daftar global yang lebih rapat */
+        .global-list-item {
+            padding-top: 0.05rem;
+            padding-bottom: 0.05rem;
+            line-height: 1.2;
+        }
+
         /* === BMKG STATUS BADGES === */
         .bmkg-status-cell {
             font-weight: 600; 
@@ -434,7 +441,7 @@ Lombok,Indonesia,-8.5,116.0,12.5,2025-09-26T06:00:00Z"></textarea>
                                             <th class="w-1/4">Provinsi</th>
                                             <th class="w-2/5">Kota/Kab</th>
                                             <th class="w-1/6 text-center">Status</th>
-                                            <th class="w-1/5">ETA (WIB)</th>
+                                            <th class="w-1/5">ETA</th>
                                         </tr>
                                     </thead>
                                     <tbody id="bmkg-table-body">
@@ -448,7 +455,12 @@ Lombok,Indonesia,-8.5,116.0,12.5,2025-09-26T06:00:00Z"></textarea>
                             <!-- Wilayah Terdampak List (CSV 3 - Global) -->
                             <div id="area-terdampak-list" class="w-full hidden pb-4">
                                 <h4 class="list-header font-bold text-base text-red-600 mb-2 text-center">Wilayah Berpotensi Terdampak (Global)</h4>
-                                <ul id="terdampak-list" class="space-y-1 text-sm text-gray-700">
+                                <!-- Header untuk daftar global -->
+                                <div class="flex justify-between items-center text-xs font-bold text-gray-800 px-1 pb-1 mb-1">
+                                    <span>Lokasi</span>
+                                    <span>ETA (WIB)</span>
+                                </div>
+                                <ul id="terdampak-list" class="text-sm text-gray-700">
                                     <!-- Populated by JS -->
                                 </ul>
                                 <!-- Caption Total Wilayah -->
@@ -877,9 +889,9 @@ Lombok,Indonesia,-8.5,116.0,12.5,2025-09-26T06:00:00Z"></textarea>
                 worldCopyJump: true 
             });
 
-            L.tileLayer('https://tiles.gempa.de/{z}/{x}/{y}.png', {
+            L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
                 maxZoom: 16,
-                attribution: 'gempa.de',
+                attribution: 'ESRI',
                 noWrap: false
             }).addTo(map);
 
@@ -993,7 +1005,7 @@ Lombok,Indonesia,-8.5,116.0,12.5,2025-09-26T06:00:00Z"></textarea>
             areaTerdampakBMKGDiv.classList.add('hidden');
             noPotentialArea.classList.add('hidden');
 
-            const GLOBAL_DISPLAY_LIMIT_FRAME = 9; 
+            const GLOBAL_DISPLAY_LIMIT_FRAME = 12; 
             const BMKG_DISPLAY_LIMIT_FRAME = 15;
             const RECORDED_DISPLAY_LIMIT_FRAME = 15; // BATAS BARU
 
@@ -1071,7 +1083,7 @@ Lombok,Indonesia,-8.5,116.0,12.5,2025-09-26T06:00:00Z"></textarea>
                     displayAreas.forEach(area => {
                         const etaWIB = formatWaktu(area.eta, 'eta');
                         terdampakListUl.innerHTML += `
-                            <li class="flex justify-between items-center pb-0.5">
+                            <li class="flex justify-between items-center global-list-item">
                                 <span class="text-xs text-gray-700">${area.lokasi}, ${area.negara}</span>
                                 <span class="font-semibold text-xs text-red-600">${etaWIB}</span>
                             </li>
@@ -1116,8 +1128,8 @@ Lombok,Indonesia,-8.5,116.0,12.5,2025-09-26T06:00:00Z"></textarea>
                 }
                 
                 return `
-                    <div class="recorded-wave-icon-container ${colorClass}" style="width: 30px; height: 30px; display: flex; justify-content: center; align-items: center; border-radius: 50%;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="${strokeColor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <div class="recorded-wave-icon-container ${colorClass}" style="width: 24px; height: 24px; display: flex; justify-content: center; align-items: center; border-radius: 50%;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${strokeColor}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M2 15s1-2 2-2 2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2 1 2 2 2"/>
                             <path d="M2 9s1-2 2-2 2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2 1 2 2 2"/>
                         </svg>
@@ -1201,8 +1213,8 @@ Lombok,Indonesia,-8.5,116.0,12.5,2025-09-26T06:00:00Z"></textarea>
                     const recordedIcon = L.divIcon({
                         className: 'recorded-wave-icon', 
                         html: tsunamiIconSVG(heightClass),
-                        iconSize: [30, 30],
-                        iconAnchor: [15, 15]
+                        iconSize: [24, 24],
+                        iconAnchor: [12, 12]
                     });
 
                     // Tambahkan Marker dengan Z-Index Offset
@@ -1352,10 +1364,6 @@ Lombok,Indonesia,-8.5,116.0,12.5,2025-09-26T06:00:00Z`;
     </script>
 </body>
 </html>
-
-
-
-
 
 
 
