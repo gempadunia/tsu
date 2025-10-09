@@ -83,7 +83,7 @@
         
         /* FONT SIZE UNTUK WAKTU DIKECILKAN */
         .time-container {
-            font-size: 0.8rem; /* Ukuran font lebih kecil untuk tanggal/waktu */
+            font-size: 0.875rem; /* Ukuran font diseragamkan (sm) */
         }
         .time-container svg {
              width: 1rem; /* Ikon juga sedikit dikecilkan */
@@ -392,14 +392,18 @@ Lombok,Indonesia,-8.5,116.0,12.5,2025-09-26T06:00:00Z"></textarea>
                         
                         <!-- MAGNITUDE (Center) -->
                         <div class="text-center my-2">
-                            <!-- ID display-magnitude, menggunakan ukuran responsif dari CSS -->
+                            
                             <p id="display-magnitude" class="font-black leading-none mt-1">7.1</p>
                         </div>
 
-                        <!-- Kedalaman (Bottom) -->
-                        <div class="flex items-center space-x-2 text-sm justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 12.343l-3.535 3.536m-2.829-2.829l-3.535 3.536m-2.121-2.121L3 17.25m18-10.5L3 6.75m18 0l-3.535 3.536" /></svg>
-                            <p id="display-kedalaman" class="font-semibold text-white">10 Km</p>
+                        <!-- Kedalaman & Lokasi (Bottom) -->
+                        <div>
+                             <p class="text-sm text-white font-bold">Kedalaman</p>
+                            <div class="flex items-center space-x-2 text-sm justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 12.343l-3.535 3.536m-2.829-2.829l-3.535 3.536m-2.121-2.121L3 17.25m18-10.5L3 6.75m18 0l-3.535 3.536"></path></svg>
+                                <p id="display-kedalaman" class="font-semibold text-white">10 Km</p>
+                            </div>
+                            <p id="display-location" class="text-sm font-semibold text-white mt-3 leading-tight"></p>
                         </div>
                         
                     </div>
@@ -967,6 +971,7 @@ Lombok,Indonesia,-8.5,116.0,12.5,2025-09-26T06:00:00Z"></textarea>
             document.getElementById('display-time-container').innerHTML = formatWaktu(sourceData.waktu, 'koordinat');
             document.getElementById('display-magnitude').textContent = sourceData.mag.toFixed(1);
             document.getElementById('display-kedalaman').textContent = `${sourceData.kedalaman} Km`;
+            document.getElementById('display-location').textContent = sourceData.lokasi;
 
 
             // === 2. UPDATE RIGHT (WHITE) BLOCK ===
@@ -1364,6 +1369,12 @@ Lombok,Indonesia,-8.5,116.0,12.5,2025-09-26T06:00:00Z`;
     </script>
 </body>
 </html>
+
+
+
+
+
+
 
 
 
